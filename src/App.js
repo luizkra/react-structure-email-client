@@ -2,37 +2,35 @@ import React, { Component } from 'react';
 import './styles.scss';
 import store from './lib/store';
 import ListCustom from './components/listCustom';
+import { addToList } from './lib/actionCreators';
+import { connect } from 'react-redux';
 
-class App extends Component {
-  constructor() {
-    super();
-    this.addToList = this.addToList.bind(this);
-     this.state = {
-      items: []
-    }
-  }
-  addItemToList() {
-        //this.setState({ mails: newMails })
-        this.addToList({ item: 'item nuevo' })
-  }
-  render() {
+
+const App = ({ listData }) => {
     return (
       <div className="app">
         <header className="app-header">
           <h1 className="app-title">Lista dinámica</h1>
         </header>
-        <section className="app-Container">
-          <button onClick={() => this.addItemToList()}>Agregar elemento </button>
+        <section className="app-container">
+          <button onClick={() => addToList({item: 'item nuevo'})}>Agregar elemento </button>
           <ListCustom />
         </section>
       </div>
     );
-  }
-  addToList(item) {
-    store.dispatch({
-      type: "ADD_TO_LIST",
-      item
-    })
+}
+const mapStateToProps = state => {
+  console.log(state)
+  return {
+    listData: state.listData
   }
 }
-export default App; 
+
+const mapDispatchToProps = dispatch => {
+  return {
+    addToList(item) {
+      dispatch(addToList(item))
+    }
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(App);

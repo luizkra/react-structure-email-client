@@ -1,30 +1,21 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import store from '../lib/store';
+import { connect } from 'react-redux';
 
-class ListCustom extends Component {
-  constructor() {
-    super();
-     this.state = {
-        listData: []
-    }
-     store.subscribe(() => {
-      this.setState({
-        listData: store.getState().listData
-      })
-    })
-  }
-
-  render() {
+const ListCustom = ({ listData }) => {
     return (
     <ul className="list-custom"> 
-       {this.state.listData.map((data, index) => 
+       {listData.map((data, index) => 
          <li className="item-custom" key={index}>
             {index} {data.item}
           </li>
           )}
     </ul>
    );
- }
 }
-export default ListCustom;
+const mapStateToProps = state => {
+    return {
+      listData: state.listData
+    }
+}
+export default connect(mapStateToProps)(ListCustom);
